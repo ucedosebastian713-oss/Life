@@ -1,0 +1,5193 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0b1220">
+<meta name="description" content="Mi Vida AI - diario predictivo personal">
+<title>Mi Vida AI — Consejero Predictivo</title>
+
+<style>
+:root{
+  --bg:#07101d;
+  --panel:#0d1929;
+  --panel2:#101f32;
+  --line:#1c3048;
+  --text:#eef5ff;
+  --muted:#8fa4bd;
+  --accent:#62a8ff;
+  --green:#39d98a;
+  --yellow:#f4c95d;
+  --red:#ff6b78;
+  --cyan:#48d6e8;
+  --purple:#a98bff;
+  --shadow:0 12px 35px rgba(0,0,0,.28);
+  --radius:20px;
+}
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+body{
+  margin:0;
+  background:
+    radial-gradient(circle at 50% -10%,#142c48 0,#07101d 42%,#050b13 100%);
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  min-height:100vh;
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+.app{
+  max-width:760px;
+  margin:auto;
+  min-height:100vh;
+  padding-bottom:88px;
+}
+
+.top{
+  position:sticky;
+  top:0;
+  z-index:20;
+  background:rgba(7,16,29,.88);
+  backdrop-filter:blur(16px);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  padding:14px 16px;
+}
+
+.toprow{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.logo{
+  width:40px;
+  height:40px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#234b78,#0e263f);
+  font-size:21px;
+  box-shadow:0 8px 25px rgba(46,134,222,.22);
+}
+
+.brand h1{
+  font-size:16px;
+  margin:0;
+}
+
+.brand small{
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin-top:2px;
+}
+
+.iconbtn{
+  border:1px solid var(--line);
+  background:var(--panel);
+  color:var(--text);
+  width:40px;
+  height:40px;
+  border-radius:13px;
+}
+
+main{
+  padding:14px 14px 20px;
+}
+
+.view{
+  display:none;
+}
+
+.view.active{
+  display:block;
+}
+
+h2{
+  font-size:24px;
+  margin:8px 2px 4px;
+}
+
+.sub{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+.card{
+  background:linear-gradient(
+    180deg,
+    rgba(16,31,50,.96),
+    rgba(10,23,38,.96)
+  );
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:16px;
+  box-shadow:var(--shadow);
+  margin:12px 0;
+}
+
+.hero{
+  padding:20px;
+}
+
+.herohead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+.hero h3{
+  margin:0 0 4px;
+  font-size:16px;
+}
+
+.date{
+  color:var(--muted);
+  font-size:12px;
+}
+
+.ring{
+  --p:50;
+  --ring:var(--accent);
+
+  width:104px;
+  height:104px;
+  border-radius:50%;
+
+  background:
+    conic-gradient(
+      var(--ring) calc(var(--p)*1%),
+      rgba(255,255,255,.07) 0
+    );
+
+  display:grid;
+  place-items:center;
+  flex:none;
+}
+
+.ring:after{
+  content:"";
+  width:76px;
+  height:76px;
+  border-radius:50%;
+  background:#0b1726;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.04);
+}
+
+.ringtext{
+  position:absolute;
+  text-align:center;
+  font-weight:800;
+  font-size:22px;
+}
+
+.ringwrap{
+  position:relative;
+}
+
+.metricgrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.metric{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--line);
+  padding:13px;
+  border-radius:16px;
+}
+
+.metric .big{
+  font-size:23px;
+  font-weight:800;
+}
+
+.metric small{
+  color:var(--muted);
+}
+
+.pred{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.025);
+  border-radius:17px;
+  padding:14px;
+  margin-top:10px;
+}
+
+.predtop{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.predname{
+  font-weight:750;
+}
+
+.prob{
+  font-size:23px;
+  font-weight:850;
+}
+
+.yesno{
+  display:inline-flex;
+  margin-top:7px;
+  padding:5px 9px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
+
+.yes{
+  background:rgba(57,217,138,.12);
+  color:var(--green);
+}
+
+.no{
+  background:rgba(255,107,120,.10);
+  color:var(--red);
+}
+
+.insuf{
+  background:rgba(244,201,93,.10);
+  color:var(--yellow);
+}
+
+.conf{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:6px;
+}
+
+.reason{
+  font-size:12px;
+  line-height:1.5;
+  color:#c9d7e8;
+  margin-top:8px;
+}
+
+.advice{
+  margin-top:10px;
+  padding:10px 11px;
+  border-left:3px solid var(--cyan);
+  background:rgba(72,214,232,.06);
+  font-size:12px;
+  line-height:1.5;
+}
+
+.bar{
+  height:7px;
+  border-radius:99px;
+  background:#17283d;
+  overflow:hidden;
+  margin-top:8px;
+}
+
+.bar i{
+  display:block;
+  height:100%;
+  width:50%;
+  border-radius:inherit;
+}
+
+.row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+}
+
+.chips{
+  display:flex;
+  gap:7px;
+  flex-wrap:wrap;
+}
+
+.chip{
+  padding:7px 9px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:#0c1929;
+  color:#cbd9e9;
+  font-size:11px;
+}
+
+button.primary{
+  border:0;
+  background:linear-gradient(135deg,#4b9dff,#6c7dff);
+  color:#fff;
+  padding:12px 15px;
+  border-radius:14px;
+  font-weight:800;
+  box-shadow:0 8px 20px rgba(75,157,255,.2);
+}
+
+button.secondary{
+  border:1px solid var(--line);
+  background:#0d1b2d;
+  color:#dce9f8;
+  padding:11px 13px;
+  border-radius:13px;
+  font-weight:700;
+}
+
+button.danger{
+  border:1px solid rgba(255,107,120,.35);
+  background:rgba(255,107,120,.08);
+  color:#ff9ca6;
+  padding:11px 13px;
+  border-radius:13px;
+  font-weight:700;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.bottom{
+  position:fixed;
+  z-index:30;
+  bottom:0;
+  left:0;
+  right:0;
+  background:rgba(6,13,23,.95);
+  backdrop-filter:blur(18px);
+  border-top:1px solid var(--line);
+  padding:
+    8px
+    max(8px,env(safe-area-inset-left))
+    calc(8px + env(safe-area-inset-bottom));
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  max-width:760px;
+  margin:auto;
+}
+
+.nav{
+  background:none;
+  border:0;
+  color:#7890aa;
+  font-size:10px;
+  padding:6px 2px;
+}
+
+.nav strong{
+  display:block;
+  font-size:19px;
+  margin-bottom:2px;
+}
+
+.nav.active{
+  color:#fff;
+}
+
+.formgrid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:11px;
+  color:#9eb1c8;
+  display:block;
+  margin-bottom:6px;
+}
+
+input,textarea,select{
+  width:100%;
+  background:#091625;
+  border:1px solid var(--line);
+  border-radius:13px;
+  color:var(--text);
+  padding:12px;
+  outline:none;
+}
+
+textarea{
+  min-height:92px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#4778aa;
+}
+
+.event{
+  padding:13px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.event:last-child{
+  border-bottom:0;
+}
+
+.eventtitle{
+  font-weight:700;
+  line-height:1.35;
+}
+
+.eventmeta{
+  font-size:11px;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+.status{
+  display:inline-block;
+  padding:4px 7px;
+  border-radius:999px;
+  font-size:10px;
+  font-weight:800;
+  margin-left:5px;
+}
+
+.s-pending{
+  color:var(--yellow);
+  background:rgba(244,201,93,.1);
+}
+
+.s-success{
+  color:var(--green);
+  background:rgba(57,217,138,.1);
+}
+
+.s-fail{
+  color:var(--red);
+  background:rgba(255,107,120,.1);
+}
+
+.s-neutral{
+  color:#aab9c9;
+  background:rgba(170,185,201,.1);
+}
+
+.s-cancelled{
+  color:#aab9c9;
+  background:rgba(170,185,201,.08);
+}
+
+.empty{
+  padding:24px;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.sectiontitle{
+  font-size:13px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#9eb4ce;
+  margin:20px 2px 8px;
+}
+
+.toast{
+  position:fixed;
+  z-index:60;
+  left:50%;
+  bottom:90px;
+  transform:translateX(-50%) translateY(20px);
+  background:#13253b;
+  border:1px solid #29435f;
+  color:#fff;
+  padding:11px 14px;
+  border-radius:12px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  font-size:12px;
+  max-width:90%;
+  text-align:center;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.68);
+  z-index:50;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.sheet{
+  width:min(760px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:#0a1625;
+  border:1px solid var(--line);
+  border-radius:24px 24px 0 0;
+  padding:18px;
+}
+
+.sheethead{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+
+.kpi{
+  display:flex;
+  justify-content:space-between;
+  padding:9px 0;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  font-size:12px;
+}
+
+.kpi:last-child{
+  border:0;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.notice{
+  padding:12px;
+  border-radius:14px;
+  background:rgba(244,201,93,.07);
+  border:1px solid rgba(244,201,93,.18);
+  font-size:12px;
+  line-height:1.5;
+  color:#d7c890;
+}
+
+@media(max-width:430px){
+
+  .metricgrid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .formgrid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .herohead{
+    align-items:flex-start;
+  }
+
+  .ring{
+    width:94px;
+    height:94px;
+  }
+
+  .ring:after{
+    width:68px;
+    height:68px;
+  }
+
+  .ringtext{
+    font-size:20px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<header class="top">
+  <div class="toprow">
+
+    <div class="brand">
+
+      <div class="logo">🧠</div>
+
+      <div>
+        <h1>Mi Vida AI</h1>
+        <small>Consejero predictivo personal</small>
+      </div>
+
+    </div>
+
+    <button
+      class="iconbtn"
+      id="quickBtn"
+      title="Registrar ahora"
+    >＋</button>
+
+  </div>
+</header>
+
+
+<main>
+
+<!-- =========================
+     INICIO
+========================= -->
+
+<section id="view-home" class="view active">
+
+  <h2>
+    Buenos días,
+    <span id="userNameHome">Sebastián</span>
+  </h2>
+
+  <div class="sub">
+    El sistema aprende de cada acontecimiento cerrado y actualiza sus cálculos inmediatamente.
+  </div>
+
+
+  <div class="card hero">
+
+    <div class="herohead">
+
+      <div>
+
+        <h3>
+          🔮 Pronóstico del próximo día
+        </h3>
+
+        <div
+          class="date"
+          id="forecastDate"
+        ></div>
+
+      </div>
+
+
+      <div class="ringwrap">
+
+        <div
+          class="ring"
+          id="mainRing"
+        >
+
+          <div
+            class="ringtext"
+            id="mainPct"
+          >—</div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div
+      style="margin-top:12px;font-size:14px;font-weight:800"
+      id="mainVerdict"
+    >
+      Calculando…
+    </div>
+
+
+    <div
+      class="conf"
+      id="mainConf"
+    ></div>
+
+
+    <div
+      class="reason"
+      id="mainReason"
+    ></div>
+
+  </div>
+
+
+  <div
+    class="metricgrid"
+    id="summaryMetrics"
+  ></div>
+
+
+  <div class="sectiontitle">
+    Pronóstico detallado
+  </div>
+
+
+  <div id="forecastList"></div>
+
+
+  <div class="sectiontitle">
+    Consejero
+  </div>
+
+
+  <div
+    class="card"
+    id="advisorBox"
+  ></div>
+
+</section>
+
+
+<!-- =========================
+     REGISTRAR
+========================= -->
+
+<section id="view-register" class="view">
+
+  <h2>
+    Registrar acontecimiento
+  </h2>
+
+  <div class="sub">
+    Registra lo que sucede en el momento.
+    Todo queda guardado y puede permanecer pendiente
+    hasta conocer el resultado.
+  </div>
+
+
+  <div class="card">
+
+    <form id="eventForm">
+
+      <div class="formgrid">
+
+
+        <div class="full">
+
+          <label>
+            ¿Qué ocurrió / qué apareció?
+          </label>
+
+          <textarea
+            id="eText"
+            required
+            placeholder="Ej.: Mi jefe me llamó para conseguir una oficina..."
+          ></textarea>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Categoría
+          </label>
+
+          <select id="eCat"></select>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Tipo
+          </label>
+
+          <select id="eType"></select>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Estado inicial
+          </label>
+
+          <select id="eStatus"></select>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Intensidad 1–5
+          </label>
+
+          <input
+            id="eIntensity"
+            type="number"
+            min="1"
+            max="5"
+            value="3"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Fecha límite / esperada
+          </label>
+
+          <input
+            id="eDue"
+            type="date"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Persona / entidad relacionada
+          </label>
+
+          <input
+            id="ePerson"
+            placeholder="Opcional"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Resultado esperado
+          </label>
+
+          <input
+            id="eExpected"
+            placeholder="¿Qué tendría que pasar?"
+          >
+
+        </div>
+
+
+        <div class="full">
+
+          <label>
+            Contexto disponible ahora
+          </label>
+
+          <textarea
+            id="eContext"
+            placeholder="Condiciones, dinero, clima, conversación, decisiones, etc."
+          ></textarea>
+
+        </div>
+
+
+        <div class="full">
+
+          <label>
+            Consecuencia conocida
+            (si ya existe)
+          </label>
+
+          <textarea
+            id="eConsequence"
+            placeholder="Opcional"
+          ></textarea>
+
+        </div>
+
+
+      </div>
+
+
+      <div
+        style="margin-top:12px"
+        class="actions"
+      >
+
+        <button
+          class="primary"
+          type="submit"
+        >
+          Guardar acontecimiento
+        </button>
+
+        <button
+          class="secondary"
+          type="button"
+          id="clearForm"
+        >
+          Limpiar
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <div class="notice">
+
+    💡 Si algo todavía no tiene resultado,
+    déjalo en <b>pendiente</b>.
+    No se contará como éxito o fracaso
+    hasta que lo cierres.
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     HISTORIAL
+========================= -->
+
+<section id="view-history" class="view">
+
+  <h2>
+    Historial
+  </h2>
+
+  <div class="sub">
+    Cada registro mantiene su estado
+    y puede actualizarse cuando se conozca
+    el resultado.
+  </div>
+
+
+  <div
+    class="card"
+    id="historyBox"
+  ></div>
+
+</section>
+
+
+<!-- =========================
+     ESTADÍSTICAS
+========================= -->
+
+<section id="view-stats" class="view">
+
+  <h2>
+    Estadísticas
+  </h2>
+
+  <div class="sub">
+    El motor usa estadísticas descriptivas,
+    Bayes, intervalos Wilson, Poisson,
+    transiciones y regresión logística
+    cuando los datos lo permiten.
+  </div>
+
+
+  <div
+    class="metricgrid"
+    id="statsMetrics"
+  ></div>
+
+
+  <div class="card">
+
+    <div
+      class="sectiontitle"
+      style="margin-top:0"
+    >
+      Calibración del sistema
+    </div>
+
+    <div id="calibration"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div
+      class="sectiontitle"
+      style="margin-top:0"
+    >
+      Patrones y transiciones
+    </div>
+
+    <div id="patterns"></div>
+
+  </div>
+
+
+  <div class="card">
+
+    <div
+      class="sectiontitle"
+      style="margin-top:0"
+    >
+      Modelo
+    </div>
+
+    <div id="modelInfo"></div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     AJUSTES
+========================= -->
+
+<section id="view-settings" class="view">
+
+  <h2>
+    Ajustes
+  </h2>
+
+  <div class="sub">
+    Tus datos se guardan en IndexedDB
+    dentro del dispositivo.
+    Puedes exportarlos para tener
+    una copia independiente.
+  </div>
+
+
+  <div class="card">
+
+    <div class="kpi">
+      <span>Registros</span>
+      <b id="setCount">0</b>
+    </div>
+
+    <div class="kpi">
+      <span>Predicciones</span>
+      <b id="setPredCount">0</b>
+    </div>
+
+    <div class="kpi">
+      <span>Resultados cerrados</span>
+      <b id="setClosed">0</b>
+    </div>
+
+    <div class="kpi">
+      <span>Versión del motor</span>
+      <b>2.0</b>
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <label>
+      Nombre
+    </label>
+
+    <input
+      id="nameInput"
+      placeholder="Tu nombre"
+    >
+
+
+    <div
+      class="actions"
+      style="margin-top:10px"
+    >
+
+      <button
+        class="primary"
+        id="saveName"
+      >
+        Guardar
+      </button>
+
+      <button
+        class="secondary"
+        id="exportBtn"
+      >
+        Exportar copia JSON
+      </button>
+
+      <button
+        class="secondary"
+        id="importBtn"
+      >
+        Importar JSON
+      </button>
+
+      <input
+        type="file"
+        id="importFile"
+        accept=".json"
+        hidden
+      >
+
+    </div>
+
+  </div>
+
+
+  <div class="card">
+
+    <button
+      class="danger"
+      id="wipeBtn"
+    >
+      Borrar todos los datos del dispositivo
+    </button>
+
+  </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================
+     NAVEGACIÓN
+========================= -->
+
+<nav class="bottom">
+
+  <button
+    class="nav active"
+    data-view="home"
+  >
+    <strong>⌂</strong>
+    Inicio
+  </button>
+
+
+  <button
+    class="nav"
+    data-view="register"
+  >
+    <strong>＋</strong>
+    Registrar
+  </button>
+
+
+  <button
+    class="nav"
+    data-view="history"
+  >
+    <strong>☷</strong>
+    Historial
+  </button>
+
+
+  <button
+    class="nav"
+    data-view="stats"
+  >
+    <strong>◔</strong>
+    Estadísticas
+  </button>
+
+
+  <button
+    class="nav"
+    data-view="settings"
+  >
+    <strong>⚙</strong>
+    Ajustes
+  </button>
+
+</nav>
+
+</div>
+
+
+<!-- =========================
+     MODAL RESULTADO
+========================= -->
+
+<div
+  class="modal"
+  id="resultModal"
+>
+
+  <div class="sheet">
+
+    <div class="sheethead">
+
+      <b id="modalTitle">
+        Actualizar resultado
+      </b>
+
+      <button
+        class="iconbtn"
+        id="closeModal"
+      >
+        ×
+      </button>
+
+    </div>
+
+
+    <div id="modalBody"></div>
+
+  </div>
+
+</div>
+
+
+<div
+  class="toast"
+  id="toast"
+></div>
+
+
+<script>
+'use strict';
+
+/*
+========================================================
+ MI VIDA AI — MOTOR ESTADÍSTICO V2
+========================================================
+
+OBJETIVO:
+Convertir los acontecimientos diarios del usuario en
+una base temporal de observaciones para:
+
+- estadísticas
+- predicción
+- seguimiento
+- calibración
+- recomendaciones
+
+IMPORTANTE:
+
+Un acontecimiento PENDIENTE no se considera éxito ni
+fracaso.
+
+Solamente cuando el usuario lo cierra como:
+
+success
+fail
+
+se convierte en observación de resultado.
+
+========================================================
+
+MODELOS
+========================================================
+
+1. BAYES BETA-BINOMIAL
+
+Posterior:
+
+p = (éxitos + alpha) /
+    (n + alpha + beta)
+
+Usamos:
+
+alpha = 1
+beta = 1
+
+Esto evita producir artificialmente 0% o 100%
+con muestras pequeñas.
+
+--------------------------------------------------------
+
+2. DECAY TEMPORAL
+
+w = exp(-lambda * días)
+
+Las observaciones antiguas no se eliminan.
+
+Simplemente tienen menor peso para determinados
+cálculos recientes.
+
+--------------------------------------------------------
+
+3. INTERVALO DE WILSON
+
+Se utiliza para expresar incertidumbre de una
+proporción observada.
+
+--------------------------------------------------------
+
+4. POISSON
+
+P(N=k) =
+e^-lambda * lambda^k / k!
+
+Para probabilidad de al menos un evento:
+
+P(N>=1) = 1 - e^-lambda
+
+Se utiliza únicamente cuando existe suficiente
+historial.
+
+--------------------------------------------------------
+
+5. MARKOV
+
+P(estado siguiente | estado actual)
+
+Se usa para estudiar secuencias.
+
+No implica causalidad.
+
+--------------------------------------------------------
+
+6. REGRESIÓN LOGÍSTICA
+
+p = sigmoid(beta0 + beta1*x1 + ...)
+
+Se entrena solamente cuando existen suficientes
+resultados cerrados y ambos resultados están
+representados.
+
+Incluye regularización L2.
+
+--------------------------------------------------------
+
+7. ENSAMBLE
+
+Las señales disponibles se combinan.
+
+No se utiliza un modelo avanzado simplemente
+porque exista en el código.
+
+--------------------------------------------------------
+
+8. CALIBRACIÓN
+
+Brier Score:
+
+Brier = promedio((p-y)^2)
+
+Cuanto más cercano a 0, mejor.
+
+También se calcula exactitud binaria.
+
+--------------------------------------------------------
+
+9. REGLA FUNDAMENTAL
+
+CORRELACIÓN / ASOCIACIÓN
+
+NO ES
+
+CAUSALIDAD.
+
+Los consejos se muestran como recomendaciones
+observacionales y nunca como garantías.
+
+========================================================
+*/
+
+
+/* =====================================================
+   BASE DE DATOS
+===================================================== */
+
+const DB_NAME='MiVidaAI_V2_DB';
+
+const DB_VER=1;
+
+const STORES={
+  events:'events',
+  preds:'predictions',
+  settings:'settings'
+};
+
+
+/* =====================================================
+   CATEGORÍAS
+===================================================== */
+
+const CATS=[
+
+  ['trabajo','💼 Trabajo'],
+
+  ['dinero','💰 Dinero'],
+
+  ['familia','🏠 Familia'],
+
+  ['relaciones','❤️ Relaciones'],
+
+  ['propiedades','🏢 Propiedades / alquileres'],
+
+  ['tramites','📋 Trámites / documentos'],
+
+  ['reparacion','🔧 Reparaciones'],
+
+  ['oportunidad','🎯 Oportunidad'],
+
+  ['decision','🧠 Decisión'],
+
+  ['emocion','🙂 Emoción'],
+
+  ['salud','🌿 Salud'],
+
+  ['clima','🌦️ Entorno / clima'],
+
+  ['problema','⚠️ Problema'],
+
+  ['objetivo','🚀 Objetivo / proyecto'],
+
+  ['otro','📝 Otro']
+
+];
+
+
+/* =====================================================
+   TIPOS
+===================================================== */
+
+const TYPES=[
+
+  ['situation','Situación'],
+
+  ['task','Tarea / compromiso'],
+
+  ['opportunity','Oportunidad'],
+
+  ['payment','Dinero / pago'],
+
+  ['decision','Decisión'],
+
+  ['information','Información'],
+
+  ['symptom','Síntoma / estado personal'],
+
+  ['other','Otro']
+
+];
+
+
+/* =====================================================
+   ESTADOS
+===================================================== */
+
+const STATUSES=[
+
+  ['pending','🟡 Pendiente'],
+
+  ['success','🟢 Logrado / positivo'],
+
+  ['fail','🔴 No logrado / negativo'],
+
+  ['neutral','⚪ Neutral / sin impacto'],
+
+  ['cancelled','⚫ Cancelado / ya no aplica']
+
+];
+
+
+/* =====================================================
+   ESTADO GLOBAL
+===================================================== */
+
+let db;
+
+let state={
+  events:[],
+  predictions:[],
+  settings:{
+    name:'Sebastián'
+  }
+};
+
+let activeEventId=null;
+
+
+/* =====================================================
+   FUNCIONES GENERALES
+===================================================== */
+
+const $=id=>document.getElementById(id);
+
+
+const uid=()=>{
+
+  if(
+    typeof crypto!=='undefined' &&
+    crypto.randomUUID
+  ){
+
+    return crypto.randomUUID();
+
+  }
+
+  return Date.now().toString(36)+
+    Math.random().toString(36).slice(2);
+
+};
+
+
+const nowISO=()=>new Date().toISOString();
+
+
+const todayKey=(d=new Date())=>{
+
+  const x=new Date(d);
+
+  return x.toISOString().slice(0,10);
+
+};
+
+
+const daysBetween=(a,b)=>{
+
+  return Math.max(
+    0,
+    (new Date(b)-new Date(a))/86400000
+  );
+
+};
+
+
+const clamp=(x,a=0,b=1)=>{
+
+  return Math.min(
+    b,
+    Math.max(a,x)
+  );
+
+};
+
+
+const sigmoid=z=>{
+
+  return 1/
+    (
+      1+
+      Math.exp(
+        -Math.max(
+          -30,
+          Math.min(30,z)
+        )
+      )
+    );
+
+};
+
+
+const mean=a=>{
+
+  return a.length
+    ? a.reduce((x,y)=>x+y,0)/a.length
+    : 0;
+
+};
+
+
+/* =====================================================
+   INDEXEDDB
+===================================================== */
+
+function openDB(){
+
+  return new Promise((resolve,reject)=>{
+
+    const request=
+      indexedDB.open(
+        DB_NAME,
+        DB_VER
+      );
+
+
+    request.onupgradeneeded=()=>{
+
+      db=request.result;
+
+      for(
+        const store of Object.values(STORES)
+      ){
+
+        if(
+          !db.objectStoreNames.contains(store)
+        ){
+
+          db.createObjectStore(
+            store,
+            {
+              keyPath:'id'
+            }
+          );
+
+        }
+
+      }
+
+    };
+
+
+    request.onsuccess=()=>{
+
+      db=request.result;
+
+      resolve(db);
+
+    };
+
+
+    request.onerror=()=>{
+
+      reject(request.error);
+
+    };
+
+  });
+
+}
+
+
+function all(store){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const request=
+        db
+        .transaction(
+          store,
+          'readonly'
+        )
+        .objectStore(store)
+        .getAll();
+
+
+      request.onsuccess=()=>{
+
+        resolve(
+          request.result || []
+        );
+
+      };
+
+
+      request.onerror=()=>{
+
+        reject(request.error);
+
+      };
+
+    }
+  );
+
+}
+
+
+function put(store,obj){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const request=
+        db
+        .transaction(
+          store,
+          'readwrite'
+        )
+        .objectStore(store)
+        .put(obj);
+
+
+      request.onsuccess=()=>{
+
+        resolve(obj);
+
+      };
+
+
+      request.onerror=()=>{
+
+        reject(request.error);
+
+      };
+
+    }
+  );
+
+}
+
+
+function del(store,id){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const request=
+        db
+        .transaction(
+          store,
+          'readwrite'
+        )
+        .objectStore(store)
+        .delete(id);
+
+
+      request.onsuccess=()=>{
+
+        resolve();
+
+      };
+
+
+      request.onerror=()=>{
+
+        reject(request.error);
+
+      };
+
+    }
+  );
+
+}
+
+
+function clearStore(store){
+
+  return new Promise(
+    (resolve,reject)=>{
+
+      const request=
+        db
+        .transaction(
+          store,
+          'readwrite'
+        )
+        .objectStore(store)
+        .clear();
+
+
+      request.onsuccess=()=>{
+
+        resolve();
+
+      };
+
+
+      request.onerror=()=>{
+
+        reject(request.error);
+
+      };
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   UTILIDADES DE INTERFAZ
+===================================================== */
+
+function fillSelect(id,arr){
+
+  $(id).innerHTML=
+    arr
+    .map(
+      x=>`
+        <option value="${x[0]}">
+          ${x[1]}
+        </option>
+      `
+    )
+    .join('');
+
+}
+
+
+function toast(msg){
+
+  const element=$('toast');
+
+  element.textContent=msg;
+
+  element.classList.add('show');
+
+  setTimeout(
+    ()=>{
+      element.classList.remove('show');
+    },
+    2400
+  );
+
+}
+
+
+function confLevel(n){
+
+  if(n<5)
+    return ['muy baja','yellow'];
+
+  if(n<12)
+    return ['baja','yellow'];
+
+  if(n<25)
+    return ['media','yellow'];
+
+  if(n<60)
+    return ['alta','green'];
+
+  return ['muy alta','green'];
+
+}
+
+
+function statusLabel(s){
+
+  const found=
+    STATUSES.find(
+      x=>x[0]===s
+    );
+
+  return found
+    ? found[1]
+    : s;
+
+}
+
+
+function catLabel(c){
+
+  const found=
+    CATS.find(
+      x=>x[0]===c
+    );
+
+  return found
+    ? found[1]
+    : c;
+
+}
+
+
+function typeLabel(t){
+
+  const found=
+    TYPES.find(
+      x=>x[0]===t
+    );
+
+  return found
+    ? found[1]
+    : t;
+
+}
+
+
+/* =====================================================
+   RESULTADO BINARIO
+===================================================== */
+
+function eventOutcome(event){
+
+  if(event.status==='success')
+    return 1;
+
+  if(event.status==='fail')
+    return 0;
+
+  return null;
+
+}
+
+
+/* =====================================================
+   ESTADÍSTICA PONDERADA
+===================================================== */
+
+function weightedStats(
+  events,
+  predicate
+){
+
+  const yes=[];
+  const no=[];
+
+  const cutoff=Date.now();
+
+
+  for(
+    const event of events
+  ){
+
+    if(
+      event.status!=='success' &&
+      event.status!=='fail'
+    ){
+
+      continue;
+
+    }
+
+
+    if(!predicate(event))
+      continue;
+
+
+    const age=
+      Math.max(
+        0,
+        (
+          cutoff-
+          new Date(
+            event.updatedAt ||
+            event.createdAt
+          )
+        )/
+        86400000
+      );
+
+
+    const weight=
+      Math.exp(
+        -0.045*age
+      );
+
+
+    if(
+      event.status==='success'
+    ){
+
+      yes.push(weight);
+
+    }else{
+
+      no.push(weight);
+
+    }
+
+  }
+
+
+  const sy=
+    yes.reduce(
+      (a,b)=>a+b,
+      0
+    );
+
+
+  const sn=
+    no.reduce(
+      (a,b)=>a+b,
+      0
+    );
+
+
+  const n=sy+sn;
+
+
+  const posterior=
+    (sy+1)/
+    (n+2);
+
+
+  const raw=
+    n
+      ? sy/n
+      : 0;
+
+
+  return{
+    sy,
+    sn,
+    n,
+    p:posterior,
+    raw
+  };
+
+}
+
+
+/* =====================================================
+   INTERVALO WILSON
+===================================================== */
+
+function wilson(
+  k,
+  n,
+  z=1.96
+){
+
+  if(n<=0)
+    return [0,1];
+
+
+  const p=k/n;
+
+  const denominator=
+    1+
+    z*z/n;
+
+
+  const center=
+    (
+      p+
+      z*z/(2*n)
+    )/
+    denominator;
+
+
+  const half=
+    z*
+    Math.sqrt(
+      (
+        p*(1-p)+
+        z*z/(4*n)
+      )/
+      n
+    )/
+    denominator;
+
+
+  return[
+    clamp(center-half),
+    clamp(center+half)
+  ];
+
+}
+
+
+/* =====================================================
+   POISSON
+===================================================== */
+
+function poissonProbAtLeastOne(
+  lambda
+){
+
+  return 1-
+    Math.exp(
+      -Math.max(
+        0,
+        lambda
+      )
+    );
+
+}
+
+
+function poissonRate(
+  events,
+  predicate
+){
+
+  if(!events.length)
+    return 0;
+
+
+  const times=
+    events.map(
+      e=>new Date(
+        e.createdAt
+      ).getTime()
+    );
+
+
+  const oldest=
+    Math.min(
+      ...times
+    );
+
+
+  const days=
+    Math.max(
+      7,
+      Math.min(
+        180,
+        Math.max(
+          1,
+          (
+            Date.now()-
+            oldest
+          )/
+          86400000
+        )
+      )
+    );
+
+
+  let count=0;
+
+
+  for(
+    const event of events
+  ){
+
+    if(
+      predicate(event) &&
+      event.status!=='cancelled'
+    ){
+
+      count++;
+
+    }
+
+  }
+
+
+  return count/days;
+
+}
+
+
+/* =====================================================
+   PALABRAS CONTEXTUALES
+===================================================== */
+
+const categoryWords={
+
+  trabajo:[
+    'jefe',
+    'cliente',
+    'trabajo',
+    'presupuesto',
+    'servicio',
+    'oficina',
+    'alquiler',
+    'contrato',
+    'empleo',
+    'pintura',
+    'plomer',
+    'electric'
+  ],
+
+  dinero:[
+    'dinero',
+    'pago',
+    'cobro',
+    'cobrar',
+    'deuda',
+    'préstamo',
+    'plata',
+    'ingreso',
+    'gasto',
+    'transferencia'
+  ],
+
+  familia:[
+    'hijo',
+    'hijos',
+    'esposa',
+    'papá',
+    'mamá',
+    'familia',
+    'documento',
+    'reconocer'
+  ],
+
+  relaciones:[
+    'amigo',
+    'pareja',
+    'esposa',
+    'discusión',
+    'hablar',
+    'persona',
+    'cliente'
+  ],
+
+  propiedades:[
+    'inquilino',
+    'departamento',
+    'habitación',
+    'oficina',
+    'alquiler',
+    'renovar',
+    'contrato'
+  ],
+
+  tramites:[
+    'documento',
+    'firma',
+    'papel',
+    'trámite',
+    'solicitud',
+    'reconocer'
+  ],
+
+  reparacion:[
+    'techo',
+    'goteras',
+    'reparar',
+    'electricidad',
+    'plomería',
+    'pintura',
+    'arreglar'
+  ],
+
+  oportunidad:[
+    'oportunidad',
+    'oferta',
+    'propuesta',
+    'posible',
+    'conseguir'
+  ],
+
+  decision:[
+    'decidí',
+    'decisión',
+    'excluí',
+    'aceptar',
+    'rechazar'
+  ],
+
+  emocion:[
+    'feliz',
+    'triste',
+    'enojo',
+    'ansiedad',
+    'preocup',
+    'buen día',
+    'mal día'
+  ],
+
+  salud:[
+    'dolor',
+    'síntoma',
+    'medicamento',
+    'salud',
+    'fiebre',
+    'tos',
+    'cabeza'
+  ],
+
+  clima:[
+    'lluvia',
+    'llueve',
+    'calor',
+    'frío',
+    'clima',
+    'tiempo',
+    'viento'
+  ],
+
+  problema:[
+    'problema',
+    'falló',
+    'perdí',
+    'canceló',
+    'rechazó',
+    'discusión',
+    'retraso'
+  ],
+
+  objetivo:[
+    'objetivo',
+    'meta',
+    'proyecto',
+    'plan',
+    'terminar',
+    'conseguir'
+  ]
+
+};
+
+
+/* =====================================================
+   REGRESIÓN LOGÍSTICA
+===================================================== */
+
+function buildFeatures(event){
+
+  const text=
+    (
+      event.text+
+      ' '+
+      (event.context||'')+
+      ' '+
+      (event.expected||'')
+    )
+    .toLowerCase();
+
+
+  const dow=
+    new Date(
+      event.createdAt
+    ).getDay();
+
+
+  return[
+
+    1,
+
+    (event.intensity||3)/5,
+
+    event.category==='trabajo'
+      ?1:0,
+
+    event.category==='dinero'
+      ?1:0,
+
+    event.category==='familia'
+      ?1:0,
+
+    event.category==='relaciones'
+      ?1:0,
+
+    event.category==='propiedades'
+      ?1:0,
+
+    event.category==='oportunidad'
+      ?1:0,
+
+    event.category==='problema'
+      ?1:0,
+
+    event.category==='salud'
+      ?1:0,
+
+    /jefe|cliente|inquilino|esposa|hijo|papá|persona/
+      .test(text)
+      ?1:0,
+
+    /pendiente|debe|tengo que|esper/
+      .test(text)
+      ?1:0,
+
+    /dinero|pago|cobro|alquiler/
+      .test(text)
+      ?1:0,
+
+    dow/6
+
+  ];
+
+}
+
+
+function dot(a,b){
+
+  let sum=0;
+
+  for(
+    let i=0;
+    i<a.length;
+    i++
+  ){
+
+    sum+=a[i]*b[i];
+
+  }
+
+  return sum;
+
+}
+
+
+function logisticTrain(events){
+
+  const rows=
+    events.filter(
+      e=>eventOutcome(e)!==null
+    );
+
+
+  if(
+    rows.length<12 ||
+    new Set(
+      rows.map(eventOutcome)
+    ).size<2
+  ){
+
+    return null;
+
+  }
+
+
+  const X=
+    rows.map(
+      buildFeatures
+    );
+
+
+  const y=
+    rows.map(
+      eventOutcome
+    );
+
+
+  const m=
+    X[0].length;
+
+
+  let beta=
+    new Array(m).fill(0);
+
+
+  let learningRate=.08;
+
+  const l2=.015;
+
+
+  for(
+    let epoch=0;
+    epoch<900;
+    epoch++
+  ){
+
+    const gradient=
+      new Array(m).fill(0);
+
+
+    for(
+      let i=0;
+      i<X.length;
+      i++
+    ){
+
+      const prediction=
+        sigmoid(
+          dot(
+            beta,
+            X[i]
+          )
+        );
+
+
+      const error=
+        prediction-
+        y[i];
+
+
+      for(
+        let j=0;
+        j<m;
+        j++
+      ){
+
+        gradient[j]+=
+          error*
+          X[i][j];
+
+      }
+
+    }
+
+
+    for(
+      let j=0;
+      j<m;
+      j++
+    ){
+
+      gradient[j]/=
+        X.length;
+
+
+      if(j>0){
+
+        gradient[j]+=
+          l2*
+          beta[j];
+
+      }
+
+
+      beta[j]-=
+        learningRate*
+        gradient[j];
+
+    }
+
+
+    if(
+      epoch%150===0
+    ){
+
+      learningRate*=.93;
+
+    }
+
+  }
+
+
+  return{
+    beta,
+    n:rows.length
+  };
+
+}
+
+
+function logisticPredict(
+  model,
+  event
+){
+
+  if(!model)
+    return null;
+
+
+  return sigmoid(
+    dot(
+      model.beta,
+      buildFeatures(event)
+    )
+  );
+
+}
+
+
+/* =====================================================
+   MARKOV
+===================================================== */
+
+function markovSuccess(
+  events,
+  category
+){
+
+  const sequence=
+    events
+    .filter(
+      e=>e.category===category
+    )
+    .sort(
+      (a,b)=>
+        new Date(a.createdAt)-
+        new Date(b.createdAt)
+    );
+
+
+  if(sequence.length<8)
+    return null;
+
+
+  let successToSuccess=0;
+  let successTotal=0;
+
+  let failToSuccess=0;
+  let failTotal=0;
+
+
+  for(
+    let i=1;
+    i<sequence.length;
+    i++
+  ){
+
+    const previous=
+      eventOutcome(
+        sequence[i-1]
+      );
+
+
+    const current=
+      eventOutcome(
+        sequence[i]
+      );
+
+
+    if(
+      previous===null ||
+      current===null
+    ){
+
+      continue;
+
+    }
+
+
+    if(previous===1){
+
+      successTotal++;
+
+      if(current===1)
+        successToSuccess++;
+
+    }else{
+
+      failTotal++;
+
+      if(current===1)
+        failToSuccess++;
+
+    }
+
+  }
+
+
+  const last=
+    eventOutcome(
+      sequence[sequence.length-1]
+    );
+
+
+  if(last===null)
+    return null;
+
+
+  if(last===1){
+
+    if(successTotal<3)
+      return null;
+
+    return successToSuccess/
+      successTotal;
+
+  }
+
+
+  if(failTotal<3)
+    return null;
+
+
+  return failToSuccess/
+    failTotal;
+
+}
+
+
+/* =====================================================
+   CALIBRACIÓN
+===================================================== */
+
+function calibrate(){
+
+  const scored=
+    state.predictions.filter(
+      p=>
+        p.actual!==null &&
+        p.actual!==undefined
+    );
+
+
+  if(!scored.length){
+
+    return{
+      n:0,
+      brier:null,
+      accuracy:null
+    };
+
+  }
+
+
+  const brier=
+    mean(
+      scored.map(
+        p=>
+          (p.prob-p.actual)**2
+      )
+    );
+
+
+  const accuracy=
+    mean(
+      scored.map(
+        p=>
+          p.predicted===p.actual
+            ?1
+            :0
+      )
+    );
+
+
+  return{
+    n:scored.length,
+    brier,
+    accuracy
+  };
+
+}
+
+
+/* =====================================================
+   PREDICCIÓN POR CATEGORÍA
+===================================================== */
+
+function forecastForCategory(
+  category
+){
+
+  const closed=
+    state.events.filter(
+      e=>
+        eventOutcome(e)!==null
+    );
+
+
+  const weighted=
+    weightedStats(
+      closed,
+      e=>e.category===category
+    );
+
+
+  const categoryClosed=
+    closed.filter(
+      e=>e.category===category
+    );
+
+
+  const categoryCount=
+    categoryClosed.length;
+
+
+  const logistic=
+    logisticTrain(
+      closed
+    );
+
+
+  const open=
+    state.events.filter(
+      e=>e.status==='pending'
+    );
+
+
+  const openCategory=
+    open.filter(
+      e=>e.category===category
+    );
+
+
+  const components=[];
+
+
+  /*
+    BAYES
+  */
+
+  if(categoryCount>=1){
+
+    components.push({
+
+      p:weighted.p,
+
+      weight:
+        categoryCount>=3
+          ?1
+          :.7
+
+    });
+
+  }
+
+
+  /*
+    CONTEXTO PENDIENTE
+  */
+
+  if(openCategory.length){
+
+    components.push({
+
+      p:.68,
+
+      weight:.35
+
+    });
+
+  }
+
+
+  /*
+    POISSON
+  */
+
+  if(closed.length>=15){
+
+    const rate=
+      poissonRate(
+        closed,
+        e=>
+          e.category===category &&
+          eventOutcome(e)===1
+      );
+
+
+    components.push({
+
+      p:
+        poissonProbAtLeastOne(
+          rate
+        ),
+
+      weight:.25
+
+    });
+
+  }
+
+
+  /*
+    MARKOV
+  */
+
+  const markov=
+    markovSuccess(
+      closed,
+      category
+    );
+
+
+  if(markov!==null){
+
+    components.push({
+
+      p:markov,
+
+      weight:.35
+
+    });
+
+  }
+
+
+  /*
+    REGRESIÓN LOGÍSTICA
+  */
+
+  const synthetic={
+
+    category,
+
+    text:
+      category+
+      ' '+
+      open
+      .map(
+        e=>e.text
+      )
+      .join(' '),
+
+    context:
+      open
+      .map(
+        e=>e.context||''
+      )
+      .join(' '),
+
+    expected:'',
+
+    intensity:3,
+
+    createdAt:nowISO()
+
+  };
+
+
+  const logisticPrediction=
+    logisticPredict(
+      logistic,
+      synthetic
+    );
+
+
+  if(
+    logisticPrediction!==null
+  ){
+
+    components.push({
+
+      p:logisticPrediction,
+
+      weight:
+        categoryCount>=12
+          ?.65
+          :.20
+
+    });
+
+  }
+
+
+  /*
+    ENSAMBLE
+  */
+
+  const usable=
+    components.filter(
+      x=>x.weight>0
+    );
+
+
+  let probability=.5;
+
+
+  if(usable.length){
+
+    let numerator=0;
+
+    let denominator=0;
+
+
+    for(
+      const component
+      of usable
+    ){
+
+      numerator+=
+        component.p*
+        component.weight;
+
+
+      denominator+=
+        component.weight;
+
+    }
+
+
+    probability=
+      numerator/
+      denominator;
+
+  }
+
+
+  probability=
+    clamp(
+      probability,
+      .01,
+      .99
+    );
+
+
+  /*
+    INCERTIDUMBRE
+  */
+
+  const effectiveN=
+    weighted.n;
+
+
+  const rawN=
+    weighted.sy+
+    weighted.sn;
+
+
+  const rawK=
+    weighted.sy;
+
+
+  const interval=
+    wilson(
+      rawK,
+      rawN
+    );
+
+
+  const confidence=
+    confLevel(
+      categoryCount
+    );
+
+
+  const last=
+    categoryClosed
+    .slice()
+    .sort(
+      (a,b)=>
+        new Date(b.createdAt)-
+        new Date(a.createdAt)
+    )[0];
+
+
+  return{
+
+    category,
+
+    p:probability,
+
+    n:categoryCount,
+
+    effectiveN,
+
+    lo:interval[0],
+
+    hi:interval[1],
+
+    confidence:
+      confidence[0],
+
+    color:
+      confidence[1],
+
+    components,
+
+    open:
+      openCategory.length,
+
+    last
+
+  };
+
+}
+
+
+/* =====================================================
+   PRONÓSTICO GENERAL
+===================================================== */
+
+function buildDayForecast(){
+
+  const categories=[
+
+    'trabajo',
+
+    'dinero',
+
+    'familia',
+
+    'relaciones',
+
+    'propiedades',
+
+    'tramites',
+
+    'oportunidad',
+
+    'problema',
+
+    'emocion',
+
+    'salud'
+
+  ];
+
+
+  const forecasts=
+    categories.map(
+      category=>
+        forecastForCategory(
+          category
+        )
+    );
+
+
+  const positives=
+    forecasts.filter(
+      x=>
+        [
+          'familia',
+          'relaciones',
+          'oportunidad',
+          'trabajo',
+          'dinero'
+        ]
+        .includes(
+          x.category
+        )
+    );
+
+
+  const risks=
+    forecasts.filter(
+      x=>
+        x.category==='problema'
+    );
+
+
+  const positiveScore=
+    mean(
+      positives.map(
+        x=>x.p
+      )
+    );
+
+
+  const riskScore=
+    mean(
+      risks.map(
+        x=>x.p
+      )
+    );
+
+
+  const overall=
+    clamp(
+      .5+
+      .65*
+      (positiveScore-.5)
+      -
+      .45*
+      (riskScore-.5)
+    );
+
+
+  return{
+
+    forecasts,
+
+    overall,
+
+    risk:
+      riskScore
+
+  };
+
+}
+
+
+/* =====================================================
+   CONSEJOS
+===================================================== */
+
+function adviceFor(
+  forecast
+){
+
+  const category=
+    forecast.category;
+
+
+  if(
+    category==='trabajo'
+  ){
+
+    if(
+      forecast.p>=.55
+    ){
+
+      return(
+        'Prioriza los asuntos laborales abiertos y confirma condiciones antes de comprometerte.'
+      );
+
+    }
+
+
+    return(
+      'No fuerces resultados laborales inciertos; concentra esfuerzos en oportunidades ya confirmadas.'
+    );
+
+  }
+
+
+  if(
+    category==='dinero'
+  ){
+
+    if(
+      forecast.p>=.55
+    ){
+
+      return(
+        'Haz seguimiento de cobros pendientes y separa ingresos esperados de dinero ya recibido.'
+      );
+
+    }
+
+
+    return(
+      'Evita contar dinero pendiente como disponible hasta que el cobro esté confirmado.'
+    );
+
+  }
+
+
+  if(
+    category==='problema'
+  ){
+
+    return(
+      'Revisa primero los acontecimientos pendientes que tienen fecha o dependencia externa.'
+    );
+
+  }
+
+
+  if(
+    category==='familia' ||
+    category==='relaciones'
+  ){
+
+    return(
+      'Mantén abiertas las conversaciones importantes y evita interpretar una situación pendiente como un resultado definitivo.'
+    );
+
+  }
+
+
+  if(
+    category==='oportunidad'
+  ){
+
+    return(
+      'Actúa sobre las oportunidades con un siguiente paso concreto y una fecha.'
+    );
+
+  }
+
+
+  if(
+    category==='tramites'
+  ){
+
+    return(
+      'Completa el siguiente documento o paso verificable antes de abrir nuevos frentes.'
+    );
+
+  }
+
+
+  if(
+    category==='propiedades'
+  ){
+
+    return(
+      'Da seguimiento a interesados y renovaciones; registra cada respuesta como resultado separado.'
+    );
+
+  }
+
+
+  if(
+    category==='salud'
+  ){
+
+    return(
+      'Registra evolución y resultado real; el sistema no sustituye una evaluación médica.'
+    );
+
+  }
+
+
+  return(
+    'Observa el acontecimiento y registra su resultado cuando se conozca.'
+  );
+
+}
+
+
+/* =====================================================
+   PRESENTACIÓN
+===================================================== */
+
+function yesNo(probability){
+
+  return probability>=.5
+    ?'SÍ'
+    :'NO';
+
+}
+
+
+function colorFor(
+  probability
+){
+
+  if(probability>=.67)
+    return 'green';
+
+  if(probability>=.5)
+    return 'yellow';
+
+  return 'red';
+
+}
+
+
+function labelProb(
+  probability
+){
+
+  return Math.round(
+    probability*100
+  )+'%';
+
+}
+
+
+/* =====================================================
+   EXPLICACIÓN
+===================================================== */
+
+function reasonFor(
+  forecast
+){
+
+  const parts=[];
+
+
+  if(forecast.open){
+
+    parts.push(
+      `${forecast.open} situación(es) pendiente(s) de esta categoría`
+    );
+
+  }
+
+
+  if(forecast.n){
+
+    parts.push(
+      `${forecast.n} resultado(s) cerrado(s) comparable(s)`
+    );
+
+  }
+
+
+  if(forecast.last){
+
+    parts.push(
+      `último resultado: ${statusLabel(forecast.last.status)}`
+    );
+
+  }
+
+
+  if(!parts.length){
+
+    return(
+      'Todavía no hay evidencia específica suficiente para esta categoría.'
+    );
+
+  }
+
+
+  return parts.join(' · ')+'.';
+
+}
+
+
+/* =====================================================
+   RENDER PRONÓSTICO
+===================================================== */
+
+function renderForecast(){
+
+  const forecast=
+    buildDayForecast();
+
+
+  const percentage=
+    Math.round(
+      forecast.overall*100
+    );
+
+
+  const color=
+    colorFor(
+      forecast.overall
+    );
+
+
+  $('mainRing')
+    .style
+    .setProperty(
+      '--p',
+      percentage
+    );
+
+
+  $('mainRing')
+    .style
+    .setProperty(
+      '--ring',
+      `var(--${color})`
+    );
+
+
+  $('mainPct').textContent=
+    percentage+'%';
+
+
+  const verdict=
+    yesNo(
+      forecast.overall
+    );
+
+
+  $('mainVerdict').innerHTML=
+
+    `${verdict==='SÍ'?'🟢':'🔴'}
+     Resultado:
+     <b>${verdict}</b>
+     —
+     ${
+       forecast.overall>=.5
+       ?
+       'escenario favorable más probable'
+       :
+       'escenario desfavorable más probable'
+     }`;
+
+
+  const closed=
+    state.events.filter(
+      e=>eventOutcome(e)!==null
+    ).length;
+
+
+  $('mainConf').textContent=
+
+    `Evidencia cerrada:
+     ${closed}
+     acontecimientos ·
+     ${
+       closed<12
+       ?
+       'confianza baja / exploratoria'
+       :
+       closed<25
+       ?
+       'confianza media'
+       :
+       'evidencia acumulada'
+     }`;
+
+
+  const pending=
+    state.events.filter(
+      e=>e.status==='pending'
+    ).length;
+
+
+  $('mainReason').textContent=
+
+    `Hay ${pending} acontecimientos pendientes.
+     Los resultados pendientes NO se cuentan
+     como éxitos o fracasos.
+     El pronóstico utiliza la información disponible
+     antes de generarse.`;
+
+
+  $('forecastDate').textContent=
+
+    new Intl.DateTimeFormat(
+      'es-PY',
+      {
+        weekday:'long',
+        day:'numeric',
+        month:'long'
+      }
+    )
+    .format(
+      new Date(
+        Date.now()+86400000
+      )
+    );
+
+
+  const forecasts=
+    forecast.forecasts;
+
+
+  $('summaryMetrics').innerHTML=
+
+    forecasts
+    .slice(0,4)
+    .map(
+      f=>`
+
+        <div class="metric">
+
+          <div class="big">
+            ${labelProb(f.p)}
+          </div>
+
+          <small>
+            ${catLabel(f.category)}
+          </small>
+
+          <div class="conf">
+            ${yesNo(f.p)}
+            ·
+            ${f.confidence}
+          </div>
+
+        </div>
+
+      `
+    )
+    .join('');
+
+
+  $('forecastList').innerHTML=
+
+    forecasts
+    .map(
+      f=>{
+
+        const color=
+          colorFor(f.p);
+
+
+        const verdict=
+          yesNo(f.p);
+
+
+        return`
+
+          <div class="pred">
+
+            <div class="predtop">
+
+              <div>
+
+                <div class="predname">
+                  ${catLabel(f.category)}
+                </div>
+
+                <div class="conf">
+                  ${f.n}
+                  casos cerrados comparables
+                  ·
+                  ${f.confidence}
+                </div>
+
+              </div>
+
+
+              <div class="prob">
+                ${labelProb(f.p)}
+              </div>
+
+            </div>
+
+
+            <span
+              class="yesno
+              ${verdict==='SÍ'?'yes':'no'}"
+            >
+
+              Resultado:
+              ${verdict}
+
+            </span>
+
+
+            <div class="reason">
+
+              ${reasonFor(f)}
+
+            </div>
+
+
+            <div class="bar">
+
+              <i
+                style="
+                  width:${Math.round(f.p*100)}%;
+                  background:var(--${color})
+                "
+              ></i>
+
+            </div>
+
+
+            <div class="advice">
+
+              💡
+              <b>Consejo:</b>
+              ${adviceFor(f)}
+
+            </div>
+
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join('');
+
+
+  const strongest=
+    forecasts
+    .slice()
+    .sort(
+      (a,b)=>
+        Math.abs(b.p-.5)-
+        Math.abs(a.p-.5)
+    )[0];
+
+
+  $('advisorBox').innerHTML=
+
+    `
+
+      <div
+        style="
+          font-size:15px;
+          font-weight:800
+        "
+      >
+        🎯 Consejo principal
+      </div>
+
+
+      <div class="reason">
+
+        ${
+          strongest
+          ?
+          `
+            La señal más marcada actualmente es
+            <b>
+              ${catLabel(strongest.category)}
+            </b>
+            (${labelProb(strongest.p)}).
+
+            ${adviceFor(strongest)}
+          `
+          :
+          `
+            Registra acontecimientos
+            para comenzar a construir evidencia.
+          `
+        }
+
+      </div>
+
+
+      <div
+        class="conf"
+        style="margin-top:10px"
+      >
+
+        El consejo es observacional;
+        no constituye garantía causal.
+
+      </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   SNAPSHOT DE PREDICCIONES
+===================================================== */
+
+async function savePredictionSnapshot(){
+
+  const forecast=
+    buildDayForecast();
+
+
+  const createdAt=
+    nowISO();
+
+
+  for(
+    const f of forecast.forecasts
+  ){
+
+    const prediction={
+
+      id:uid(),
+
+      createdAt,
+
+      category:
+        f.category,
+
+      prob:
+        f.p,
+
+      predicted:
+        f.p>=.5
+          ?1
+          :0,
+
+      actual:null,
+
+      evidenceN:
+        f.n,
+
+      confidence:
+        f.confidence,
+
+      modelVersion:
+        '2.0',
+
+      contextEventIds:
+        state.events
+        .filter(
+          e=>e.status==='pending'
+        )
+        .map(
+          e=>e.id
+        )
+
+    };
+
+
+    await put(
+      STORES.preds,
+      prediction
+    );
+
+
+    state.predictions.push(
+      prediction
+    );
+
+  }
+
+}
+
+
+async function maybeSnapshot(){
+
+  const day=
+    todayKey();
+
+
+  const existing=
+    state.predictions.filter(
+      p=>
+        p.createdAt.slice(0,10)===day
+    );
+
+
+  if(!existing.length){
+
+    await savePredictionSnapshot();
+
+  }
+
+}
+
+
+/* =====================================================
+   HISTORIAL
+===================================================== */
+
+function renderHistory(){
+
+  const events=
+    state.events
+    .slice()
+    .sort(
+      (a,b)=>
+        new Date(b.createdAt)-
+        new Date(a.createdAt)
+    );
+
+
+  if(!events.length){
+
+    $('historyBox').innerHTML=
+      `
+        <div class="empty">
+          Todavía no hay acontecimientos.
+        </div>
+      `;
+
+    return;
+
+  }
+
+
+  $('historyBox').innerHTML=
+
+    events
+    .map(
+      event=>{
+
+        const text=
+          escapeHTML(
+            event.text
+          );
+
+
+        const meta=
+
+          `${
+            new Intl.DateTimeFormat(
+              'es-PY',
+              {
+                dateStyle:'medium',
+                timeStyle:'short'
+              }
+            )
+            .format(
+              new Date(
+                event.createdAt
+              )
+            )
+          }
+          ·
+          ${catLabel(event.category)}
+          ·
+          intensidad
+          ${event.intensity}/5`;
+
+
+        return`
+
+          <div class="event">
+
+            <div class="eventtitle">
+
+              ${text}
+
+              <span
+                class="
+                  status
+                  s-${event.status}
+                "
+              >
+                ${statusLabel(event.status)}
+              </span>
+
+            </div>
+
+
+            <div class="eventmeta">
+              ${meta}
+            </div>
+
+
+            ${
+              event.expected
+              ?
+              `
+                <div class="eventmeta">
+                  Esperado:
+                  ${escapeHTML(event.expected)}
+                </div>
+              `
+              :
+              ''
+            }
+
+
+            ${
+              event.consequence
+              ?
+              `
+                <div class="eventmeta">
+                  Consecuencia:
+                  ${escapeHTML(event.consequence)}
+                </div>
+              `
+              :
+              ''
+            }
+
+
+            <div
+              class="actions"
+              style="margin-top:8px"
+            >
+
+              <button
+                class="secondary"
+                onclick="editEvent('${event.id}')"
+              >
+                Actualizar estado
+              </button>
+
+
+              <button
+                class="danger"
+                onclick="removeEvent('${event.id}')"
+              >
+                Eliminar
+              </button>
+
+            </div>
+
+          </div>
+
+        `;
+
+      }
+    )
+    .join('');
+
+}
+
+
+/* =====================================================
+   ESCAPE HTML
+===================================================== */
+
+function escapeHTML(value){
+
+  return String(
+    value||''
+  )
+  .replace(
+    /[&<>"']/g,
+    character=>({
+
+      '&':'&amp;',
+      '<':'&lt;',
+      '>':'&gt;',
+      '"':'&quot;',
+      "'":'&#039;'
+
+    }[character])
+  );
+
+}
+
+
+/* =====================================================
+   EDITAR ACONTECIMIENTO
+===================================================== */
+
+function editEvent(id){
+
+  const event=
+    state.events.find(
+      x=>x.id===id
+    );
+
+
+  if(!event)
+    return;
+
+
+  activeEventId=id;
+
+
+  $('modalTitle').textContent=
+    'Cerrar / actualizar acontecimiento';
+
+
+  $('modalBody').innerHTML=
+
+    `
+
+      <div
+        class="card"
+        style="margin-top:0"
+      >
+
+        <b>
+          ${escapeHTML(event.text)}
+        </b>
+
+
+        <div class="conf">
+
+          ${catLabel(event.category)}
+          ·
+          ${
+            new Intl.DateTimeFormat(
+              'es-PY',
+              {
+                dateStyle:'medium'
+              }
+            )
+            .format(
+              new Date(
+                event.createdAt
+              )
+            )
+          }
+
+        </div>
+
+      </div>
+
+
+      <label>
+        Estado
+      </label>
+
+
+      <select id="mStatus">
+
+        ${
+          STATUSES
+          .map(
+            x=>
+              `
+                <option
+                  value="${x[0]}"
+                  ${
+                    event.status===x[0]
+                    ?
+                    'selected'
+                    :
+                    ''
+                  }
+                >
+                  ${x[1]}
+                </option>
+              `
+          )
+          .join('')
+        }
+
+      </select>
+
+
+      <div style="margin-top:10px">
+
+        <label>
+          Resultado real
+        </label>
+
+
+        <textarea
+          id="mResult"
+          placeholder="¿Qué pasó realmente?"
+        >${escapeHTML(event.result||'')}</textarea>
+
+      </div>
+
+
+      <div style="margin-top:10px">
+
+        <label>
+          Consecuencia
+        </label>
+
+
+        <textarea
+          id="mConsequence"
+          placeholder="¿Qué provocó este resultado?"
+        >${escapeHTML(event.consequence||'')}</textarea>
+
+      </div>
+
+
+      <div
+        style="margin-top:12px"
+        class="actions"
+      >
+
+        <button
+          class="primary"
+          onclick="saveEventUpdate()"
+        >
+          Guardar resultado
+        </button>
+
+
+        <button
+          class="secondary"
+          onclick="closeModal()"
+        >
+          Cancelar
+        </button>
+
+      </div>
+
+    `;
+
+
+  $('resultModal')
+    .classList
+    .add('show');
+
+}
+
+
+/* =====================================================
+   GUARDAR RESULTADO
+===================================================== */
+
+async function saveEventUpdate(){
+
+  const event=
+    state.events.find(
+      x=>x.id===activeEventId
+    );
+
+
+  if(!event)
+    return;
+
+
+  event.status=
+    $('mStatus').value;
+
+
+  event.result=
+    $('mResult')
+    .value
+    .trim();
+
+
+  event.consequence=
+    $('mConsequence')
+    .value
+    .trim();
+
+
+  event.updatedAt=
+    nowISO();
+
+
+  await put(
+    STORES.events,
+    event
+  );
+
+
+  const actual=
+    eventOutcome(event);
+
+
+  /*
+    Vinculamos el resultado con predicciones
+    de la misma categoría que existían antes
+    del cierre.
+
+    No modificamos predicciones futuras.
+  */
+
+  if(actual!==null){
+
+    const predictions=
+      state.predictions
+      .filter(
+        p=>
+          p.category===event.category &&
+          p.actual===null &&
+          new Date(p.createdAt)<=
+          new Date(event.updatedAt)
+      );
+
+
+    /*
+      Limitamos la asociación para no contaminar
+      todas las predicciones históricas con un
+      solo resultado.
+    */
+
+    for(
+      const prediction
+      of predictions.slice(-10)
+    ){
+
+      prediction.actual=
+        actual;
+
+
+      await put(
+        STORES.preds,
+        prediction
+      );
+
+    }
+
+  }
+
+
+  closeModal();
+
+
+  await refresh();
+
+
+  toast(
+    'Resultado guardado y estadísticas actualizadas.'
+  );
+
+}
+
+
+/* =====================================================
+   CERRAR MODAL
+===================================================== */
+
+function closeModal(){
+
+  $('resultModal')
+    .classList
+    .remove('show');
+
+
+  activeEventId=null;
+
+}
+
+
+/* =====================================================
+   EXPONER FUNCIONES AL HTML
+===================================================== */
+
+window.editEvent=
+  editEvent;
+
+window.saveEventUpdate=
+  saveEventUpdate;
+
+window.closeModal=
+  closeModal;
+
+
+/* =====================================================
+   ELIMINAR EVENTO
+===================================================== */
+
+async function removeEvent(id){
+
+  if(
+    !confirm(
+      '¿Eliminar este acontecimiento?'
+    )
+  ){
+
+    return;
+
+  }
+
+
+  await del(
+    STORES.events,
+    id
+  );
+
+
+  state.events=
+    state.events.filter(
+      x=>x.id!==id
+    );
+
+
+  await refresh();
+
+
+  toast(
+    'Acontecimiento eliminado.'
+  );
+
+}
+
+
+window.removeEvent=
+  removeEvent;
+
+
+/* =====================================================
+   ESTADÍSTICAS
+===================================================== */
+
+function renderStats(){
+
+  const closed=
+    state.events.filter(
+      e=>eventOutcome(e)!==null
+    );
+
+
+  const pending=
+    state.events.filter(
+      e=>e.status==='pending'
+    );
+
+
+  const calibration=
+    calibrate();
+
+
+  $('statsMetrics').innerHTML=
+
+    [
+
+      [
+        state.events.length,
+        'Total registros'
+      ],
+
+      [
+        closed.length,
+        'Resultados cerrados'
+      ],
+
+      [
+        pending.length,
+        'Pendientes'
+      ],
+
+      [
+        state.predictions.length,
+        'Predicciones'
+      ]
+
+    ]
+    .map(
+      item=>
+        `
+
+          <div class="metric">
+
+            <div class="big">
+              ${item[0]}
+            </div>
+
+            <small>
+              ${item[1]}
+            </small>
+
+          </div>
+
+        `
+    )
+    .join('');
+
+
+  $('calibration').innerHTML=
+
+    `
+
+      <div class="kpi">
+
+        <span>
+          Predicciones evaluadas
+        </span>
+
+        <b>
+          ${calibration.n}
+        </b>
+
+      </div>
+
+
+      <div class="kpi">
+
+        <span>
+          Brier score
+        </span>
+
+        <b>
+
+          ${
+            calibration.brier===null
+            ?
+            '—'
+            :
+            calibration.brier.toFixed(3)
+          }
+
+        </b>
+
+      </div>
+
+
+      <div class="kpi">
+
+        <span>
+          Acierto binario
+        </span>
+
+        <b>
+
+          ${
+            calibration.accuracy===null
+            ?
+            '—'
+            :
+            Math.round(
+              calibration.accuracy*100
+            )+'%'
+          }
+
+        </b>
+
+      </div>
+
+
+      <div
+        class="conf"
+        style="margin-top:8px"
+      >
+
+        Brier más cercano a 0 es mejor.
+        Con pocas predicciones,
+        la métrica es inestable.
+
+      </div>
+
+    `;
+
+
+  const counts={};
+
+
+  closed.forEach(
+    event=>{
+
+      counts[event.category]=
+        (
+          counts[event.category]||0
+        )+1;
+
+    }
+  );
+
+
+  const patternLines=
+
+    Object
+    .entries(counts)
+    .sort(
+      (a,b)=>b[1]-a[1]
+    )
+    .slice(0,8)
+    .map(
+      ([category,count])=>
+        `
+
+          <div class="kpi">
+
+            <span>
+              ${catLabel(category)}
+            </span>
+
+            <b>
+              ${count}
+            </b>
+
+          </div>
+
+        `
+    )
+    .join('');
+
+
+  $('patterns').innerHTML=
+    patternLines ||
+    `
+      <div class="empty">
+        Aún no hay suficientes
+        resultados cerrados.
+      </div>
+    `;
+
+
+  const logistic=
+    logisticTrain(
+      closed
+    );
+
+
+  $('modelInfo').innerHTML=
+
+    `
+
+      <div class="kpi">
+
+        <span>
+          Bayes Beta-Binomial
+        </span>
+
+        <b>
+          Activo desde 1 caso
+        </b>
+
+      </div>
+
+
+      <div class="kpi">
+
+        <span>
+          Wilson
+        </span>
+
+        <b>
+          Activo con resultados
+        </b>
+
+      </div>
+
+
+      <div class="kpi">
+
+        <span>
+          Poisson
+        </span>
+
+        <b>
+          ${
+            closed.length>=15
+            ?
+            'Activo'
+            :
+            'En espera (<15)'
+          }
+        </b>
+
+      </div>
+
+
+      <div class="kpi">
+
+        <span>
+          Markov
+        </span>
+
+        <b>
+          ${
+            closed.length>=8
+            ?
+            'Activo por categoría'
+            :
+            'En espera (<8)'
+          }
+        </b>
+
+      </div>
+
+
+      <div class="kpi">
+
+        <span>
+          Regresión logística
+        </span>
+
+        <b>
+          ${
+            logistic
+            ?
+            'Activa (≥12 cerrados)'
+            :
+            'En espera (<12)'
+          }
+        </b>
+
+      </div>
+
+
+      <div
+        class="conf"
+        style="margin-top:8px"
+      >
+
+        El motor es un ensamble.
+        Ningún componente se presenta
+        como causalidad ni como certeza.
+
+      </div>
+
+    `;
+
+}
+
+
+/* =====================================================
+   AJUSTES
+===================================================== */
+
+function renderSettings(){
+
+  $('setCount').textContent=
+    state.events.length;
+
+
+  $('setPredCount').textContent=
+    state.predictions.length;
+
+
+  $('setClosed').textContent=
+
+    state.events.filter(
+      e=>eventOutcome(e)!==null
+    ).length;
+
+
+  $('nameInput').value=
+    state.settings.name||
+    'Sebastián';
+
+
+  $('userNameHome').textContent=
+    state.settings.name||
+    'Sebastián';
+
+}
+
+
+/* =====================================================
+   REFRESCAR TODA LA APP
+===================================================== */
+
+async function refresh(){
+
+  renderForecast();
+
+  renderHistory();
+
+  renderStats();
+
+  renderSettings();
+
+}
+
+
+/* =====================================================
+   GUARDAR NUEVO ACONTECIMIENTO
+===================================================== */
+
+async function submitEvent(
+  event
+){
+
+  event.preventDefault();
+
+
+  const newEvent={
+
+    id:uid(),
+
+    createdAt:
+      nowISO(),
+
+    updatedAt:
+      nowISO(),
+
+    text:
+      $('eText')
+      .value
+      .trim(),
+
+    category:
+      $('eCat').value,
+
+    type:
+      $('eType').value,
+
+    status:
+      $('eStatus').value,
+
+    intensity:
+      Number(
+        $('eIntensity').value
+      )||3,
+
+    due:
+      $('eDue').value,
+
+    person:
+      $('ePerson')
+      .value
+      .trim(),
+
+    expected:
+      $('eExpected')
+      .value
+      .trim(),
+
+    context:
+      $('eContext')
+      .value
+      .trim(),
+
+    consequence:
+      $('eConsequence')
+      .value
+      .trim(),
+
+    result:''
+
+  };
+
+
+  if(!newEvent.text)
+    return;
+
+
+  await put(
+    STORES.events,
+    newEvent
+  );
+
+
+  state.events.push(
+    newEvent
+  );
+
+
+  $('eventForm').reset();
+
+
+  $('eIntensity').value=3;
+
+
+  await refresh();
+
+
+  showView('home');
+
+
+  toast(
+    'Guardado. El pronóstico fue recalculado.'
+  );
+
+}
+
+
+/* =====================================================
+   NAVEGACIÓN
+===================================================== */
+
+function showView(view){
+
+  document
+    .querySelectorAll('.view')
+    .forEach(
+      element=>
+        element.classList.remove(
+          'active'
+        )
+    );
+
+
+  $('view-'+view)
+    .classList
+    .add('active');
+
+
+  document
+    .querySelectorAll('.nav')
+    .forEach(
+      element=>
+        element.classList.toggle(
+          'active',
+          element.dataset.view===view
+        )
+    );
+
+
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
+
+}
+
+
+/* =====================================================
+   EXPORTAR DATOS
+===================================================== */
+
+async function exportData(){
+
+  const data={
+
+    app:
+      'Mi Vida AI',
+
+    version:
+      '2.0',
+
+    exportedAt:
+      nowISO(),
+
+    events:
+      state.events,
+
+    predictions:
+      state.predictions,
+
+    settings:
+      state.settings
+
+  };
+
+
+  const blob=
+    new Blob(
+      [
+        JSON.stringify(
+          data,
+          null,
+          2
+        )
+      ],
+      {
+        type:
+          'application/json'
+      }
+    );
+
+
+  const link=
+    document.createElement('a');
+
+
+  link.href=
+    URL.createObjectURL(
+      blob
+    );
+
+
+  link.download=
+    `mi-vida-ai-backup-${todayKey()}.json`;
+
+
+  link.click();
+
+
+  URL.revokeObjectURL(
+    link.href
+  );
+
+}
+
+
+/* =====================================================
+   IMPORTAR DATOS
+===================================================== */
+
+async function importData(
+  file
+){
+
+  try{
+
+    const data=
+      JSON.parse(
+        await file.text()
+      );
+
+
+    if(
+      !data ||
+      !Array.isArray(data.events) ||
+      !Array.isArray(data.predictions)
+    ){
+
+      throw new Error(
+        'Formato inválido'
+      );
+
+    }
+
+
+    await clearStore(
+      STORES.events
+    );
+
+
+    await clearStore(
+      STORES.preds
+    );
+
+
+    for(
+      const event
+      of data.events
+    ){
+
+      await put(
+        STORES.events,
+        event
+      );
+
+    }
+
+
+    for(
+      const prediction
+      of data.predictions
+    ){
+
+      await put(
+        STORES.preds,
+        prediction
+      );
+
+    }
+
+
+    if(data.settings){
+
+      await put(
+        STORES.settings,
+        {
+          id:'main',
+          ...data.settings
+        }
+      );
+
+    }
+
+
+    state.events=
+      data.events;
+
+
+    state.predictions=
+      data.predictions;
+
+
+    state.settings=
+      data.settings||
+      state.settings;
+
+
+    await refresh();
+
+
+    toast(
+      'Copia restaurada.'
+    );
+
+
+  }catch(error){
+
+    alert(
+      'No se pudo importar el archivo: '+
+      error.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   EVENTOS DE INTERFAZ
+===================================================== */
+
+document
+  .querySelectorAll('.nav')
+  .forEach(
+    button=>
+      button.addEventListener(
+        'click',
+        ()=>{
+          showView(
+            button.dataset.view
+          );
+        }
+      )
+  );
+
+
+$('quickBtn').onclick=()=>{
+
+  showView(
+    'register'
+  );
+
+};
+
+
+$('closeModal').onclick=
+  closeModal;
+
+
+$('resultModal')
+  .addEventListener(
+    'click',
+    event=>{
+
+      if(
+        event.target.id===
+        'resultModal'
+      ){
+
+        closeModal();
+
+      }
+
+    }
+  );
+
+
+$('eventForm')
+  .addEventListener(
+    'submit',
+    submitEvent
+  );
+
+
+$('clearForm').onclick=()=>{
+
+  $('eventForm').reset();
+
+};
+
+
+$('saveName').onclick=
+  async()=>{
+
+    state.settings.name=
+      $('nameInput')
+      .value
+      .trim()||
+      'Sebastián';
+
+
+    await put(
+      STORES.settings,
+      {
+        id:'main',
+        ...state.settings
+      }
+    );
+
+
+    await refresh();
+
+
+    toast(
+      'Nombre guardado.'
+    );
+
+  };
+
+
+$('exportBtn').onclick=
+  exportData;
+
+
+$('importBtn').onclick=()=>{
+
+  $('importFile').click();
+
+};
+
+
+$('importFile')
+  .onchange=
+  event=>{
+
+    const file=
+      event.target.files[0];
+
+
+    if(file){
+
+      importData(file);
+
+    }
+
+  };
+
+
+$('wipeBtn').onclick=
+  async()=>{
+
+    if(
+      confirm(
+        'Esto eliminará TODOS los acontecimientos y predicciones de este dispositivo. ¿Continuar?'
+      )
+    ){
+
+      await clearStore(
+        STORES.events
+      );
+
+
+      await clearStore(
+        STORES.preds
+      );
+
+
+      state.events=[];
+
+      state.predictions=[];
+
+
+      await refresh();
+
+
+      toast(
+        'Datos eliminados.'
+      );
+
+    }
+
+  };
+
+
+/* =====================================================
+   INICIALIZACIÓN
+===================================================== */
+
+async function init(){
+
+  fillSelect(
+    'eCat',
+    CATS
+  );
+
+
+  fillSelect(
+    'eType',
+    TYPES
+  );
+
+
+  fillSelect(
+    'eStatus',
+    STATUSES
+  );
+
+
+  try{
+
+    await openDB();
+
+
+    state.events=
+      await all(
+        STORES.events
+      );
+
+
+    state.predictions=
+      await all(
+        STORES.preds
+      );
+
+
+    const settings=
+      await all(
+        STORES.settings
+      );
+
+
+    if(settings[0]){
+
+      state.settings=
+        settings[0];
+
+    }
+
+
+  }catch(error){
+
+    alert(
+      'El almacenamiento local no está disponible. La app necesita IndexedDB para conservar los datos.'
+    );
+
+    return;
+
+  }
+
+
+  /*
+    Crea una fotografía de las predicciones
+    del día solamente si todavía no existe.
+  */
+
+  await maybeSnapshot();
+
+
+  await refresh();
+
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>
